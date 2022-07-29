@@ -15,36 +15,20 @@ public class Snake extends JFrame{
 
     //------------------------------------------------------Set up the main interface
     private void setSnakeFrame(){
-        JFrame mainFrame = new JFrame("Snake Game") ;
-        JPanel mainPanel = new JPanel(null) ;
-        JPanel buttonPanel = new JPanel(null) ;
+        this.setTitle("Snake Game") ;
+        
 
-        Button startButton = new Button("Start") ;
-        startButton.setLocation(50,400);
-        startButton.setSize(100,100);
-
-        Button EndButton = new Button("End Game") ;
-        EndButton.setLocation(200,400);
-        EndButton.setSize(100,100);
-
-        Button helpButton = new Button("Help!") ;
-        helpButton.setLocation(350,400);
-        helpButton.setSize(100,100);
-
-        buttonPanel.add(startButton, BorderLayout.SOUTH) ;
-        buttonPanel.add(EndButton, BorderLayout.SOUTH) ;
-        buttonPanel.add(helpButton, BorderLayout.SOUTH) ;
-
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE) ;
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE) ;
+        this.pack() ;
+        this.setResizable(false);
 
         int width = 500 ;
         int height = 500 ;
-        mainFrame.setSize(width, height );
+        this.setSize(width, height );
 
-        mainFrame.setContentPane(mainPanel);
-        mainFrame.setContentPane(buttonPanel);
-        mainFrame.setLocationRelativeTo(null);
-        mainFrame.setVisible(true);
+        this.add(new Play()); 
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
 
 
     }
