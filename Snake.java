@@ -4,9 +4,20 @@ import javax.swing.*;
 import java.awt.Button ;
 import java.awt.BorderLayout;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.Dimension;
+
 
 //------------------------------------------------------Snake class
 public class Snake extends JFrame{
+
+    private Button startButton ;
+    private Button EndButton ;
+    private Button helpButton ;
+    private JPanel buttonPanel ;
+
+    private boolean started = false ;
     
     //------------------------------------------------------Constructor
     public Snake(){
@@ -15,6 +26,42 @@ public class Snake extends JFrame{
 
     //------------------------------------------------------Set up the main interface
     private void setSnakeFrame(){
+
+        startButton = new Button("Start") ;
+        startButton.setLocation(50,400);
+        startButton.setSize(100,100);
+        startButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                started = true ;
+            }
+        });
+
+        EndButton = new Button("End Game") ;
+        EndButton.setLocation(200,400);
+        EndButton.setSize(100,100);
+        EndButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                started = false ;
+            }
+        });
+
+        helpButton = new Button("Help!") ;
+        helpButton.setLocation(350,400);
+        helpButton.setSize(100,100);
+
+        buttonPanel = new JPanel() ;
+
+        //this.setPreferredSize( new Dimension(500,500) ) ;
+        buttonPanel.add(startButton, BorderLayout.SOUTH) ;
+        buttonPanel.add(EndButton, BorderLayout.SOUTH) ;
+        buttonPanel.add(helpButton, BorderLayout.SOUTH) ;
+        this.add(buttonPanel) ;
+
+
         this.setTitle("Snake Game") ;
         
 
