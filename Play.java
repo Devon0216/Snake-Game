@@ -1,21 +1,20 @@
 import java.awt.Image ;
-//import java.awt.image.BufferedImage;
-//import java.awt.Button ;
-//import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-//import java.awt.Dimension;
 import java.awt.Graphics;
 
-//import java.io.File;
-//import java.io.IOException;
-//import javax.imageio.ImageIO;
 
 
 
 import javax.swing.JPanel;
-//import javax.swing.JLabel ;
 import javax.swing.ImageIcon ;
+import javax.swing.Timer;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.Toolkit;
 
 //------------------------------------------------------Play class
 
@@ -24,6 +23,7 @@ public class Play extends JPanel implements ActionListener {
     private Image snakeHead ;
     private Image snakeBody ;
     private Image Food ;
+    private Timer timer;
 
 
 
@@ -37,15 +37,21 @@ public class Play extends JPanel implements ActionListener {
 
     private boolean started = false ;
     private int bodyLength = 0 ;
+
+    private boolean left = true ;
+    private boolean right = false ;
+    private boolean up = false ;
+    private boolean down = false ;
     
     //------------------------------------------------------Constructor 
     public Play(){
+        addKeyListener(new TAdapter());
         gameSet() ;
+        Start() ;
     }
 
     //------------------------------------------------------gameSet method to set the game interface
     public void gameSet(){
-        //------------------------------------------------------------------Drawing images
         ImageIcon iish = new ImageIcon("Pictures/Snake.png");
         snakeHead = null ;
         snakeHead = iish.getImage() ;
@@ -57,20 +63,13 @@ public class Play extends JPanel implements ActionListener {
         ImageIcon iif = new ImageIcon("Pictures/Snake.png");
         Food = null ;
         Food = iif.getImage() ;
-
-        repaint() ;
         
     }
 
     //------------------------------------------------------Method to spawn the snake
     public void spawnSnake(){
         bodyLength = 2;
-        /* 
-        for (int i = 0; i< bodyLength; i++) {
-            x[i] = 50 - i * 10;
-            y[i] = 50;
-        }
-        */
+
         for (int i = 0; i< bodyLength; i++) {
             x[i] = (int) (Math.random() * totalDots) + oneDot; ;
             y[i] = (int) (Math.random() * totalDots) + oneDot ;
@@ -87,17 +86,64 @@ public class Play extends JPanel implements ActionListener {
         foodY = (y * oneDot) ;
     }
 
+
+
+
+
+
+
+
+
     //------------------------------------------------------End method to end the game
-    public void Start(Graphics g){
+    public void Start(){
         
         //doDrawing(g);
+        started = true ;
+        spawnSnake() ;
+        spawnFood() ;
+
+        timer = new Timer(100, this);
+        timer.start();
 
         
     }
     
     //------------------------------------------------------End method to end the game
-    public void End(Graphics g){
+    public void End(){
+        started = false ;
 
+        timer.stop();
+    }
+
+
+
+
+
+
+
+
+    //------------------------------------------------------Method to move the snake
+    public void move(){
+        for (int i = bodyLength; i > 0; i--) {
+            x[i] = x[(i - 1)];
+            y[i] = y[(i - 1)];
+        }
+
+        if (left) {
+            x[0] -= oneDot;
+        }
+
+        if (right) {
+            x[0] += oneDot;
+        }
+
+        if (up) {
+            y[0] -= oneDot;
+        }
+
+        if (down) {
+            y[0] += oneDot;
+        }
     }
 
     //------------------------------------------------------Method to check if the snake eats the food
@@ -110,8 +156,39 @@ public class Play extends JPanel implements ActionListener {
 
     //------------------------------------------------------Method to check if the snake hits the boundary
     public void CheckCollision(){
+        if ( x[0] < 0){
+            End() ;
+        }
+
+        if ( x[0] > 500){
+            End() ;
+        }
+
+        if ( y[0] < 0){
+            End() ;
+        }
+
+        if ( y[0] > 500){
+            End() ;
+        }
+
+        for (int i = bodyLength; i > 0; i--) {
+
+            if ( (x[0] == x[i]) && (y[0] == y[i]) ){
+                End() ;
+            }
+        }
 
     }
+
+
+
+
+
+
+
+
+
 
     //------------------------------------------------------override methods from graphics
     @Override
@@ -134,24 +211,65 @@ public class Play extends JPanel implements ActionListener {
                 } else {
                     g.drawImage(snakeBody, x[i], y[i], this);
                 }
-            
-            /* 
-            Toolkit.getDefaultToolkit().sync();
-            */
             }//for loop
+
+            Toolkit.getDefaultToolkit().sync();
 
         } 
         else {
 
-            End(g);
+            End();
         }        
     }
 
     //------------------------------------------------------override methods from actionlistener
     @Override
     public void actionPerformed(ActionEvent e) {
-        repaint() ;
+        if (started) {
+
+            CheckFoodCollision();
+            CheckCollision();
+            move();
+        }
+
+        repaint();
     }
 
-    
+    //------------------------------------------------------Make a ketadapter class to controll the key press functions
+    private class TAdapter extends KeyAdapter {
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            int key = e.getKeyCode();
+
+            if ((key == KeyEvent.VK_LEFT) ) {
+                left = true;
+                right = false ;
+                up = false;
+                down = false;
+            }
+
+            if ((key == KeyEvent.VK_RIGHT) ) {
+                left = false;
+                right = true ;
+                up = false;
+                down = false;
+            }
+
+            if ((key == KeyEvent.VK_UP) ) {
+                left = false;
+                right = false ;
+                up = true;
+                down = false;
+            }
+
+            if ((key == KeyEvent.VK_DOWN) ) {
+                left = false;
+                right = false ;
+                up = false;
+                down = true;
+            }
+        }
+    }
+
 }
