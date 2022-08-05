@@ -1,12 +1,12 @@
-import javax.swing.JFrame;
-import javax.swing.*;
+import javax.swing.JFrame ;
+import javax.swing.* ;
 
 import java.awt.Button ;
-import java.awt.BorderLayout;
+import java.awt.BorderLayout ;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.Dimension;
+import java.awt.event.ActionEvent ;
+import java.awt.event.ActionListener ;
+import java.awt.EventQueue ;
 
 
 //------------------------------------------------------Snake class
@@ -26,7 +26,7 @@ public class Snake extends JFrame{
 
     //------------------------------------------------------Set up the main interface
     private void setSnakeFrame(){
-
+        //------------------------------------------------------------------Set up basic buttons
         startButton = new Button("Start") ;
         startButton.setLocation(50,400);
         startButton.setSize(100,100);
@@ -35,6 +35,7 @@ public class Snake extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 started = true ;
+                Play playTheGame = new Play() ;
             }
         });
 
@@ -82,6 +83,9 @@ public class Snake extends JFrame{
     
     //------------------------------------------------------Main method to trigger the snake constructor
     public static void main(String[] args) throws Exception {
-        Snake oneSnake = new Snake() ;
+        EventQueue.invokeLater(() -> {
+            JFrame snake = new Snake();
+            snake.setVisible(true);
+        });
     }
 }
