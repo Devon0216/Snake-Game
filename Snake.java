@@ -27,7 +27,7 @@ public class Snake extends JFrame{
     //------------------------------------------------------Set up the main interface
     private void setSnakeFrame(){
         //------------------------------------------------------------------Set up basic buttons
-        startButton = new Button("Start") ;
+        /*startButton = new Button("Start") ;
         startButton.setLocation(50,400);
         startButton.setSize(100,100);
         startButton.addActionListener(new ActionListener() {
@@ -61,7 +61,7 @@ public class Snake extends JFrame{
         buttonPanel.add(EndButton, BorderLayout.SOUTH) ;
         buttonPanel.add(helpButton, BorderLayout.SOUTH) ;
         this.add(buttonPanel) ;
-
+*/
 
         this.setTitle("Snake Game") ;
         

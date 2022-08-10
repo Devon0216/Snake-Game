@@ -15,6 +15,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.Toolkit;
+import java.awt.Color;
+import java.awt.Dimension;
 
 //------------------------------------------------------Play class
 
@@ -38,31 +40,58 @@ public class Play extends JPanel implements ActionListener {
     private boolean started = false ;
     private int bodyLength = 0 ;
 
-    private boolean left = true ;
-    private boolean right = false ;
+    private boolean left = false ;
+    private boolean right = true ;
     private boolean up = false ;
     private boolean down = false ;
     
     //------------------------------------------------------Constructor 
     public Play(){
         addKeyListener(new TAdapter());
+        setBackground(Color.black);
+        setFocusable(true);
+        //setPreferredSize(new Dimension(500, 500));
+
         gameSet() ;
         Start() ;
+        System.out.println("started") ;
     }
 
     //------------------------------------------------------gameSet method to set the game interface
     public void gameSet(){
-        ImageIcon iish = new ImageIcon("Pictures/Snake.png");
+
+        ImageIcon imageIcon = new ImageIcon("Pictures/snakeHead.png"); // load the image to a imageIcon
+        Image image = imageIcon.getImage(); // transform it 
+        Image newimg = image.getScaledInstance(10, 10,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+        imageIcon = new ImageIcon(newimg);
+        snakeHead = imageIcon.getImage() ;
+        
+        imageIcon = new ImageIcon("Pictures/snakeBody.png"); // load the image to a imageIcon
+        image = imageIcon.getImage(); // transform it 
+        newimg = image.getScaledInstance(10, 10,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+        imageIcon = new ImageIcon(newimg);       
+        snakeBody = imageIcon.getImage() ;
+
+        imageIcon = new ImageIcon("Pictures/Food.png"); // load the image to a imageIcon
+        image = imageIcon.getImage(); // transform it 
+        newimg = image.getScaledInstance(10, 10,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+        imageIcon = new ImageIcon(newimg); 
+        Food = imageIcon.getImage() ;
+
+        /* 
+        ImageIcon iish = new ImageIcon("Pictures/snakeHead.png");
         snakeHead = null ;
         snakeHead = iish.getImage() ;
+        
 
-        ImageIcon iisb = new ImageIcon("Pictures/Snake.png");
+        ImageIcon iisb = new ImageIcon("Pictures/snakeBody.png");
         snakeBody = null ;
         snakeBody = iisb.getImage() ;
 
-        ImageIcon iif = new ImageIcon("Pictures/Snake.png");
+        ImageIcon iif = new ImageIcon("Pictures/Food.png");
         Food = null ;
         Food = iif.getImage() ;
+        */
         
     }
 
@@ -71,19 +100,28 @@ public class Play extends JPanel implements ActionListener {
         bodyLength = 2;
 
         for (int i = 0; i< bodyLength; i++) {
-            x[i] = (int) (Math.random() * totalDots) + oneDot; ;
-            y[i] = (int) (Math.random() * totalDots) + oneDot ;
+            //x[i] = (int) (Math.random() * totalDots) + oneDot; ;
+            //y[i] = (int) (Math.random() * totalDots) + oneDot ;
+            x[i] = 50 - i * oneDot ;
+            y[i] = 50;
+
+            System.out.println("x: " + (50 - i * oneDot) ) ;
+            System.out.println("y: " + 50 ) ;
         }
     }
 
     //------------------------------------------------------Method to spawn the food
     public void spawnFood(){
 
-        int x = (int) (Math.random() * totalDots) + oneDot ;
-        foodX = (x * oneDot) ;
+        //int x = (int) (Math.random() * totalDots) + oneDot ;
+        int x = (int) (Math.random() * totalDots) ;
+        //foodX = (x * oneDot) ;
+        foodX = 100 ;
 
-        int y = (int) (Math.random() * totalDots) + oneDot ;
-        foodY = (y * oneDot) ;
+        //int y = (int) (Math.random() * totalDots) + oneDot ;
+        int y = (int) (Math.random() * totalDots) ;
+        //foodY = (y * oneDot) ;
+        foodY = 100 ;
     }
 
 
@@ -102,9 +140,10 @@ public class Play extends JPanel implements ActionListener {
         spawnSnake() ;
         spawnFood() ;
 
-        timer = new Timer(100, this);
+        timer = new Timer(1500, this);
         timer.start();
 
+        //repaint() ;
         
     }
     
@@ -113,6 +152,7 @@ public class Play extends JPanel implements ActionListener {
         started = false ;
 
         timer.stop();
+        setBackground(Color.black);
     }
 
 
@@ -124,6 +164,7 @@ public class Play extends JPanel implements ActionListener {
 
     //------------------------------------------------------Method to move the snake
     public void move(){
+        System.out.println("in move") ;
         for (int i = bodyLength; i > 0; i--) {
             x[i] = x[(i - 1)];
             y[i] = y[(i - 1)];
@@ -148,6 +189,7 @@ public class Play extends JPanel implements ActionListener {
 
     //------------------------------------------------------Method to check if the snake eats the food
     public void CheckFoodCollision(){
+        System.out.println("check food collision") ;
         if ( (x[0] == foodX)  && (y[0] == foodY) ){
             bodyLength++ ;
             spawnFood() ;
@@ -156,6 +198,7 @@ public class Play extends JPanel implements ActionListener {
 
     //------------------------------------------------------Method to check if the snake hits the boundary
     public void CheckCollision(){
+        System.out.println("check collision") ;
         if ( x[0] < 0){
             End() ;
         }
@@ -199,7 +242,7 @@ public class Play extends JPanel implements ActionListener {
     }
 
     private void drawSnake(Graphics g) {
-        
+        System.out.println("draw snake") ;
         if (started) {
 
             g.drawImage(Food, foodX, foodY, this);
@@ -208,8 +251,12 @@ public class Play extends JPanel implements ActionListener {
             for (int i = 0; i < bodyLength; i++) {
                 if (i == 0) {
                     g.drawImage(snakeHead, x[i], y[i], this);
+                    System.out.println("x: " + x[i] ) ;
+                    System.out.println("y: " + y[i] ) ;
                 } else {
                     g.drawImage(snakeBody, x[i], y[i], this);
+                    System.out.println("x: " + x[i] ) ;
+                    System.out.println("y: " + y[i] ) ;
                 }
             }//for loop
 
@@ -225,6 +272,7 @@ public class Play extends JPanel implements ActionListener {
     //------------------------------------------------------override methods from actionlistener
     @Override
     public void actionPerformed(ActionEvent e) {
+        System.out.println("action performed") ;
         if (started) {
 
             CheckFoodCollision();
