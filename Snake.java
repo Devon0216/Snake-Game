@@ -67,14 +67,12 @@ public class Snake extends JFrame{
         
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE) ;
-        this.pack() ;
-        this.setResizable(false);
-
-        int width = 500 ;
-        int height = 500 ;
-        this.setSize(width, height );
+        
 
         this.add(new Play()); 
+        this.setResizable(false);
+        this.pack() ;
+
         this.setLocationRelativeTo(null);
         this.setVisible(true);
 
@@ -85,7 +83,7 @@ public class Snake extends JFrame{
     public static void main(String[] args) throws Exception {
         EventQueue.invokeLater(() -> {
             JFrame snake = new Snake();
-            snake.setVisible(true);
+            //snake.setVisible(true);
         });
     }
 }
